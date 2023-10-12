@@ -1,0 +1,8 @@
+[package]
+name = "tomiokelana/gengine-framework"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]
+name = "uncontained0/red@^1.2.2"

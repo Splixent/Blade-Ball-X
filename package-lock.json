@@ -1,0 +1,21 @@
+{
+  "name": "Firebrand-Framework",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "dependencies": {
+        "@quenty/loader": "^7.0.0"
+      }
+    },
+    "node_modules/@quenty/loader": {
+      "version": "7.0.0",
+      "resolved": "https://registry.npmjs.org/@quenty/loader/-/loader-7.0.0.tgz",
+      "integrity": "sha512-sZelJlWRVdGOkEU195WsxvMuIyFEJNVmk9Lkc3/zdxJgJHT0Mj+kKHmcEx+E+GTgAkET7NysrbDNpu1XJREVew==",
+      "funding": {
+        "type": "patreon",
+        "url": "https://www.patreon.com/quenty"
+      }
+    }
+  }
+}
