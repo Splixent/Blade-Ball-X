@@ -32,7 +32,7 @@ function ScriptUtils.HMSFormat(Int: number): string
 	return string.format("%02i", Int)
 end
 
-function ScriptUtils.CreateSpring<T>(Properties: { Initial: PubTypes.Spring<T>, Speed: number, Damper: number }): { Value: PubTypes.Value<any>, Spring: PubTypes.Spring<T>}
+function ScriptUtils.CreateSpring<T>(Properties: { Initial: PubTypes.Spring<T>, Speed: number, Damper: number }): any
     local SetValue = Value(Properties.Initial)
     local SetSpring = Spring(SetValue, Properties.Speed, Properties.Damper)
 
@@ -58,11 +58,13 @@ function ScriptUtils.ConvertToMS(Seconds: number): string
 	return string.format("%02i:%02i", Seconds/60%60, Seconds%60)
 end
 
-function ScriptUtils.WeightedRandom(Dictionary: { Initial: any, Speed: number, Damper: number }, RandomSeed: Random?, ReturnObject: boolean?): any | boolean?
+function ScriptUtils.WeightedRandom(Dictionary: { Initial: any, Speed: number, Damper: number }, RandomSeed: Random?, ReturnObject: boolean?): nil | any | { Chance: number, Index: number, Object: any, Weight: number }
 	local TotalWeight = 0
 	for _, ChanceInfo in pairs(Dictionary) do
 		TotalWeight = TotalWeight + ChanceInfo.Weight
 	end
+
+	
 
 	local RandomNumber = if RandomSeed ~= nil then RandomSeed:NextNumber() * TotalWeight else math.random() * TotalWeight
 
@@ -79,6 +81,8 @@ function ScriptUtils.WeightedRandom(Dictionary: { Initial: any, Speed: number, D
 			RandomNumber = RandomNumber - ChanceInfo.Weight
 		end
 	end
+
+	return nil
 end
 
 function ScriptUtils.DeepCompare(t1: any, t2: any, ignore_mt: boolean?)

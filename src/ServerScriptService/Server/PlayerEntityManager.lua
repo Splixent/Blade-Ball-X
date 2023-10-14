@@ -16,7 +16,7 @@ local SharedTypes = require(Shared.SharedTypes)
 local PlayerEntityManager = {}
 
 function PlayerEntityManager.new(Player: Player, ExtraInfo: boolean?): SharedTypes.Replica | { Replica: SharedTypes.Replica }
-    if PlayerEntityManager[Player] == nil and Player ~= nil then
+    if PlayerEntityManager[Player] == nil then
         local PlayerEntityInfo = {}
         PlayerEntityInfo.Replica = ReplicaService.NewReplica({
             ClassToken = ReplicaService.NewClassToken("States"..Player.UserId),
@@ -29,12 +29,13 @@ function PlayerEntityManager.new(Player: Player, ExtraInfo: boolean?): SharedTyp
 end
 
 function PlayerEntityManager.SetupCharacter(Player: Player)
-    if Player == nil then return end
     Player:LoadCharacter()
 
     local DiedMaid = Maid.new()
     local Character: Model = Player.Character or Player.CharacterAdded:Wait()
-    local Humanoid: Humanoid = Character:WaitForChild("Humanoid")
+    local Humanoid: Humanoid = Character:WaitForChild("Humanoid"):: Humanoid
+
+    Humanoid.WalkSpeed = 40
 
     DiedMaid:GiveTask(Humanoid.Died:Connect(function()
         PlayerEntityManager.OnDied(Player)

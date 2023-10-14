@@ -6,14 +6,16 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local Shared = ReplicatedStorage.Shared
 local Server = ServerScriptService.Server
 
-local Red = require (Shared.Red)
+require(Server.Datastore)
+require(Server.Datastore.DataObject)
+require(Server.SyncedTime)
+require(Server.Replication)
+
 local PlayerEntityManager = require(Server.PlayerEntityManager)
-local Datastore = require(Server.Datastore)
-local DataObject = require(Server.Datastore.DataObject)
-local SyncedTime = require(Server.SyncedTime)
+local Events = require(Shared.Events)
 
-local Net = Red.Server("Network")
+local InGame = Events.InGame:Server()
 
-Net:On("InGame", function(Player)
+InGame:On(function(Player)
     PlayerEntityManager.new(Player):SetValue({"InGame"}, true)
 end)

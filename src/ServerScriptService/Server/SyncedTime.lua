@@ -19,9 +19,9 @@ local SyncedTime = {
     },
 
     isInited = false,
-    originTime = nil,
-    responseTime = nil,
-    responseDelay = nil,
+    originTime = 0,
+    responseTime = 0,
+    responseDelay = 0,
 }
 
 function SyncedTime:RFC2616DateStringToUnixTimestamp(DateString: string): number
@@ -36,7 +36,7 @@ function SyncedTime:RFC2616DateStringToUnixTimestamp(DateString: string): number
 		sec = sec
 	}
 	
-	return os.time(Date)
+	return os.time(Date:: any)
 end
 
 function SyncedTime.Inited(): boolean

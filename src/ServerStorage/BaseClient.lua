@@ -1,13 +1,14 @@
---[[local Players = game:GetService("Players")
+--!strict
+--[[
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 
 local Shared = ReplicatedStorage.Shared
 local Client = Players.LocalPlayer.PlayerScripts.Client
 ]]
-local Functions = {}
 
-function Functions.Print()
-    print("Yeo")
-end
+local BaseClient = {}
 
-return Functions
+
+
+return BaseClient

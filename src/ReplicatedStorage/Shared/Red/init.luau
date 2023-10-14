@@ -1,14 +1,44 @@
-local Net = require(script.Net)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+local Remote
+local ClientFolder
+if RunService:IsServer() then
+	if ReplicatedStorage:FindFirstChild("RedEvent") then
+		Remote = ReplicatedStorage:FindFirstChild("RedEvent") :: RemoteEvent
+	else
+		Remote = Instance.new("RemoteEvent")
+		Remote.Name = "RedEvent"
+		Remote.Parent = ReplicatedStorage
+	end
+
+	require(script.ServerEvent).Start()
+
+	local function PlayerAdded(Player: Player)
+		local ClientFolder = Instance.new("ScreenGui")
+
+		ClientFolder.Enabled = false
+		ClientFolder.ResetOnSpawn = false
+		ClientFolder.Name = "Red"
+		ClientFolder.Parent = Player:FindFirstChild("PlayerGui")
+	end
+
+	Players.PlayerAdded:Connect(PlayerAdded)
+
+	for _, Player in Players:GetPlayers() do
+		PlayerAdded(Player)
+	end
+else
+	Remote = ReplicatedStorage:WaitForChild("RedEvent") :: RemoteEvent
+
+	require(script.ClientEvent).Start()
+
+	ClientFolder = (Players.LocalPlayer:FindFirstChild("PlayerGui") :: PlayerGui):WaitForChild("Red") :: ScreenGui
+	ClientFolder.Parent = nil
+end
 
 return {
-	Server = Net.Server,
-	Client = Net.Client,
-
-	Collection = require(script.Util.Collection),
-	Ratelimit = require(script.Util.Ratelimit),
-	Promise = require(script.Util.Promise),
-	Signal = require(script.Util.Signal),
-	Clock = require(script.Util.Clock),
-	Spawn = require(script.Util.Spawn),
-	Bin = require(script.Util.Bin),
+	Event = require(script.Event),
+	Function = require(script.Function),
 }

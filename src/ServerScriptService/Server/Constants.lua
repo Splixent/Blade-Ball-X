@@ -19,6 +19,9 @@ local Constants = {
     States = {
         Loaded = false,
         InGame = false,
+
+        Deflecting = false,
+        Playing = true,
     },
 
 }
