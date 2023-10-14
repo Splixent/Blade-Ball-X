@@ -10,6 +10,7 @@ require(Server.Datastore)
 require(Server.Datastore.DataObject)
 require(Server.SyncedTime)
 require(Server.Replication)
+require(Server.DeflectManager)
 
 local PlayerEntityManager = require(Server.PlayerEntityManager)
 local Events = require(Shared.Events)

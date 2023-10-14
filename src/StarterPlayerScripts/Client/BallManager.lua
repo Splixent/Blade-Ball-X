@@ -40,7 +40,7 @@ function BallManager.SetupClientBall(ServerBall)
     BallManager.CurrentBallMaid = Maid.new()
     BallManager.CurrentBallSpring = ScriptUtils.CreateSpring({
         Initial = ServerBall.CFrame,
-        Speed = 50,
+        Speed = 100,
         Damper = 1
     })
 
@@ -57,7 +57,7 @@ function BallManager.SetupClientBall(ServerBall)
 end
 
 task.spawn(function()
-    repeat task.wait() until Replication:GetInfo("States") and Replication:GetInfo("States").InGame
+    repeat task.wait() until Replication:GetInfo("States") and Replication:GetInfo("States").InGame ~= nil
 
     if game.Workspace.GameObjects:FindFirstChild("ServerBall") then
         BallManager.SetupClientBall(game.Workspace.GameObjects.ServerBall)
