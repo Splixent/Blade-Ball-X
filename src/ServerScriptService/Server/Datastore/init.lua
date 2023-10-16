@@ -83,7 +83,8 @@ Players.PlayerAdded:Connect(function(Player: Player)
     Datastore:PlayerAdded(Player)
 end)
 
-Players.PlayerRemoving:Connect(function(Player: Player)
+Players.PlayerRemoving:Connect(function(Player: Player?)
+    assert(Player, "Player is nil")
     local Profile = Profiles[Player]
     DataObject[Player] = nil
 

@@ -13,7 +13,8 @@ local SharedTypes = require(Shared.SharedTypes)
 
 local DataObject = {}
 
-function DataObject.new(Player: Player, LoadedData: any, ExtraInfo: boolean?): SharedTypes.Replica | { Replica: SharedTypes.Replica, Signal: SharedTypes.Signal}
+function DataObject.new(Player: Player?, LoadedData: any, ExtraInfo: boolean?): SharedTypes.Replica? | { Replica: SharedTypes.Replica, Signal: SharedTypes.Signal}?
+    assert(Player, "Player is nil")
     if LoadedData == nil then
         repeat
             task.wait()
@@ -23,7 +24,7 @@ function DataObject.new(Player: Player, LoadedData: any, ExtraInfo: boolean?): S
         return DataObject[Player]
     end
 
-    if DataObject[Player] == nil and Player ~= nil then
+    if DataObject[Player] == nil then
         DataObject[Player] = {}
         DataObject[Player].Replica = ReplicaService.NewReplica({
             ClassToken = ReplicaService.NewClassToken("DataKey"..Player.UserId),
@@ -35,7 +36,8 @@ function DataObject.new(Player: Player, LoadedData: any, ExtraInfo: boolean?): S
     return if ExtraInfo then DataObject[Player] else DataObject[Player].Replica
 end
 
-function DataObject.SetData(Player: Player, Path: any, NewData: any): boolean
+function DataObject.SetData(Player: Player?, Path: any, NewData: any): boolean?
+    assert(Player, "Player is nil")
     if typeof(NewData) == "function" then
         NewData = NewData(DataObject[Player].Replica.Data) 
         if NewData == nil then
@@ -48,8 +50,12 @@ function DataObject.SetData(Player: Player, Path: any, NewData: any): boolean
     return true
 end
 
-Players.PlayerRemoving:Connect(function(Player: Player)
+Players.PlayerRemoving:Connect(function(Player: Player?)
     local Replica = DataObject.new(Player)
+    
+    assert(Player, "Player is nil")
+    assert(Replica, "PlayerData is nil")
+
     Replica:Destroy()
     if DataObject[Player] ~= nil then
         DataObject[Player] = nil

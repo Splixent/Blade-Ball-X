@@ -8,20 +8,14 @@ local Shared = ReplicatedStorage.Shared
 local Client = Players.LocalPlayer.PlayerScripts.Client
 
 local Replication = require(Client.Replication)
-local Fusion = require(Shared.Fusion)
-local ScriptUtils = require(Shared.ScriptUtils)
 local Maid = require(Shared.Maid)
 local Events = require(Shared.Events)
 
 local NewBall = Events.NewBall:Client()
 
-local Hydrate = Fusion.Hydrate
-local Computed = Fusion.Computed
-
 export type BallManager = {
     CurrentBallMaid: any,
     CurrentClientBall: Part,
-    CurrentBallSpring: any?,
     SetupClientBall: any
 }
 
@@ -36,23 +30,15 @@ function BallManager.SetupClientBall(ServerBall)
         BallManager.CurrentBallMaid:Destroy()
         BallManager.CurrentClientBall:Destroy()
     end
+    
+    local Hitbox = ServerBall:WaitForChild("Hitbox")
 
     BallManager.CurrentBallMaid = Maid.new()
-    BallManager.CurrentBallSpring = ScriptUtils.CreateSpring({
-        Initial = ServerBall.CFrame,
-        Speed = 100,
-        Damper = 1
-    })
 
-    Hydrate(BallManager.CurrentClientBall) {
-        Parent = game.Workspace.GameObjects,
-        CFrame = Computed(function()
-            return BallManager.CurrentBallSpring.Spring:get()
-        end, Fusion.cleanup)
-    }
-
-    BallManager.CurrentBallMaid:GiveTask(RunService.RenderStepped:Connect(function(DeltaTime: number)
-        BallManager.CurrentBallSpring.Value:set(ServerBall:WaitForChild("Hitbox").CFrame)
+    BallManager.CurrentClientBall.Parent = game.Workspace.GameObjects
+    
+    BallManager.CurrentBallMaid:GiveTask(RunService.Stepped:Connect(function(Time, DeltaTime: number)
+        BallManager.CurrentClientBall.Position =  BallManager.CurrentClientBall.Position:Lerp(Hitbox.Position, DeltaTime * 20)
     end))
 end
 

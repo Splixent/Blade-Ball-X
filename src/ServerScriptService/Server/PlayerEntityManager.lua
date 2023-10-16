@@ -15,7 +15,8 @@ local SharedTypes = require(Shared.SharedTypes)
 
 local PlayerEntityManager = {}
 
-function PlayerEntityManager.new(Player: Player, ExtraInfo: boolean?): SharedTypes.Replica | { Replica: SharedTypes.Replica }
+function PlayerEntityManager.new(Player: Player?, ExtraInfo: boolean?): SharedTypes.Replica | { Replica: SharedTypes.Replica } | nil
+    assert(Player, "Player is nil")
     if PlayerEntityManager[Player] == nil then
         local PlayerEntityInfo = {}
         PlayerEntityInfo.Replica = ReplicaService.NewReplica({
@@ -28,7 +29,8 @@ function PlayerEntityManager.new(Player: Player, ExtraInfo: boolean?): SharedTyp
     return if ExtraInfo then PlayerEntityManager[Player] else PlayerEntityManager[Player].Replica
 end
 
-function PlayerEntityManager.SetupCharacter(Player: Player)
+function PlayerEntityManager.SetupCharacter(Player: Player?)
+    assert(Player, "Player is nil")
     Player:LoadCharacter()
 
     local DiedMaid = Maid.new()
@@ -36,6 +38,7 @@ function PlayerEntityManager.SetupCharacter(Player: Player)
     local Humanoid: Humanoid = Character:WaitForChild("Humanoid"):: Humanoid
 
     Humanoid.WalkSpeed = 40
+    Humanoid.Health = 100
 
     DiedMaid:GiveTask(Humanoid.Died:Connect(function()
         PlayerEntityManager.OnDied(Player)
@@ -43,12 +46,16 @@ function PlayerEntityManager.SetupCharacter(Player: Player)
     end))
 end
 
-function PlayerEntityManager.OnDied(Player)
+function PlayerEntityManager.OnDied(Player: Player?)
     PlayerEntityManager.SetupCharacter(Player)
 end
 
-Players.PlayerRemoving:Connect(function(Player)
+Players.PlayerRemoving:Connect(function(Player: Player?)
     local Replica = PlayerEntityManager.new(Player)
+
+    assert(Player, "Player is nil")
+    assert(Replica, "PlayerEntity is nil")
+
     Replica:Destroy()
     if PlayerEntityManager[Player] ~= nil then
         PlayerEntityManager[Player] = nil

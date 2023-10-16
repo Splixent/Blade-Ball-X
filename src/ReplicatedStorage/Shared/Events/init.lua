@@ -4,6 +4,4 @@ return {
     RespawnBall = require(script.RespawnBall),
     NewBall = require(script.NewBall),
     Deflect = require(script.Deflect),
-    GetDirection = require(script.GetDirection),
-    SetDirection = require(script.SetDirection)
 }

@@ -14,19 +14,18 @@ local RespawnBall = Events.RespawnBall:Server()
 
 local Replication = {}
 
-SpawnBall:On(function(Player)
+SpawnBall:On(function(Player: Player?)
+    assert(Player, "Player is nil")
+    assert(Player.Character, "Character is nil")
+    
     local Ball = BallManager.new(Player)
+    assert(Ball, "Ball does not exist")
 
-    if Ball then
-        BallManager.Start(Ball)
-    else
-        print("Ball already exists.")
-    end
+    BallManager.Start(Ball)
 end)
 
-RespawnBall:On(function(Player)
+RespawnBall:On(function(Player: Player?)
     BallManager.Restart(BallManager.CurrentBall, Player)
 end)
-
 
 return Replication

@@ -17,6 +17,11 @@ local Events = require(Shared.Events)
 
 local InGame = Events.InGame:Server()
 
-InGame:On(function(Player)
-    PlayerEntityManager.new(Player):SetValue({"InGame"}, true)
+InGame:On(function(Player: Player?)
+    local PlayerEntity = PlayerEntityManager.new(Player)
+
+    assert(Player, "Player is nil")
+    assert(PlayerEntity, "PlayerEntity is nil")
+
+    PlayerEntity:SetValue({"InGame"}, true)
 end)
